@@ -1,0 +1,223 @@
+:root {
+  --primary: #232f3e;
+  --secondary: #ff9900;
+  --background: #f2f4f8;
+  --card-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-light: #666666;
+  --correct-bg: #d4edda;
+  --correct-border: #c3e6cb;
+  --correct-text: #155724;
+  --incorrect-bg: #f8d7da;
+  --incorrect-border: #f5c6cb;
+  --incorrect-text: #721c24;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background-color: var(--background);
+  color: var(--text-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  background-color: var(--card-bg);
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.header {
+  background-color: var(--primary);
+  color: white;
+  padding: 20px 30px;
+  text-align: center;
+  border-bottom: 4px solid var(--secondary);
+}
+.content {
+  padding: 30px;
+}
+
+.screen {
+  display: none;
+}
+.screen.active {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Setup Screen */
+.setup-container {
+  text-align: center;
+}
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+input[type="password"],
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: block;
+  margin: 20px auto 0;
+  width: 100%;
+  max-width: 300px;
+}
+button:hover {
+  background-color: #e88b00;
+}
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+/* Quiz Screen */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--text-light);
+  display: none;
+}
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--secondary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+.question-text {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.option-label {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+.option-label:hover:not(.disabled) {
+  border-color: var(--secondary);
+  background-color: #fffaf0;
+}
+.option-label.disabled {
+  cursor: default;
+}
+.option-label input[type="radio"] {
+  margin-right: 15px;
+  transform: scale(1.2);
+}
+.option-label.correct {
+  background-color: var(--correct-bg);
+  border-color: var(--correct-border);
+  color: var(--correct-text);
+  font-weight: bold;
+}
+.option-label.incorrect {
+  background-color: var(--incorrect-bg);
+  border-color: var(--incorrect-border);
+  color: var(--incorrect-text);
+}
+.explanation {
+  display: none;
+  margin-top: -10px;
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-left: 5px solid var(--primary);
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+/* Result Screen */
+.result-container {
+  text-align: center;
+}
+.score-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+  border: 6px solid var(--secondary);
+}
