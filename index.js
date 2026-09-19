@@ -120,3 +120,58 @@ function renderQuestion() {
   expBox.style.display = "none";
   expBox.innerText = currentQuestionData.exp;
 }
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function checkAnswer() {
+  const selectedRadio = document.querySelector('input[name="answer"]:checked');
+  if (!selectedRadio) return;
+
+  isAnswered = true;
+  const isCorrect = selectedRadio.value === currentQuestionData.ans;
+  if (isCorrect) score++;
+
+  document.querySelectorAll(".option-label").forEach((label) => {
+    label.classList.add("disabled");
+    const input = label.querySelector("input");
+    input.disabled = true;
+
+    if (input.value === currentQuestionData.ans) {
+      label.classList.add("correct");
+    } else if (input.checked && !isCorrect) {
+      label.classList.add("incorrect");
+    }
+  });
+
+  document.getElementById("explanationBox").style.display = "block";
+  document.getElementById("scoreCounter").innerText = `Acertos: ${score}`;
+  document.getElementById("actionBtn").innerText =
+    currentQuestionNum === totalQuestions
+      ? "Finalizar Simulado"
+      : "Gerar Próxima Questão";
+}
+
+function showResults() {
+  switchScreen("resultScreen");
+  const percentage = Math.round((score / totalQuestions) * 100);
+
+  const circle = document.getElementById("scoreCircle");
+  circle.innerText = `${percentage}%`;
+  circle.style.backgroundColor =
+    percentage >= 70 ? "var(--correct-text)" : "var(--incorrect-text)";
+  circle.style.borderColor =
+    percentage >= 70 ? "var(--correct-border)" : "var(--incorrect-border)";
+
+  document.getElementById("resultMessage").innerText =
+    `Você acertou ${score} de ${totalQuestions} questões geradas pela IA.`;
+}
+
+function resetQuiz() {
+  switchScreen("setupScreen");
+}
