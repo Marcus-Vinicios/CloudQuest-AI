@@ -4,6 +4,7 @@ let currentQuestionNum = 0;
 let score = 0;
 let isAnswered = false;
 let currentQuestionData = null;
+let questionsCache = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("startBtn").addEventListener("click", startQuiz);
@@ -27,34 +28,37 @@ function startQuiz() {
   totalQuestions = parseInt(document.getElementById("questionCount").value);
   currentQuestionNum = 0;
   score = 0;
+  questionsCache = [];
 
   switchScreen("quizScreen");
-  fetchNextQuestion();
+  fetchAllQuestions();
 }
-
-async function fetchNextQuestion() {
+async function fetchAllQuestions() {
   document.getElementById("quizContent").style.display = "none";
   document.getElementById("loadingState").style.display = "block";
-  isAnswered = false;
-  currentQuestionNum++;
+  
+  document.querySelector(".loading-state p").innerText = 
+    `A IA está a formular um lote de ${totalQuestions} questões inéditas. Aguarde...`;
 
   const promptText = `
     Atue como um examinador da certificação AWS Cloud Practitioner.
-    Crie UMA questão de múltipla escolha INÉDITA, de nível oficial da prova.
+    Crie exatamente ${totalQuestions} questões de múltipla escolha INÉDITAS, de nível oficial da prova.
     Varie os temas (Segurança, EC2, S3, Bancos de Dados, Faturamento, Arquitetura).
-    Você DEVE retornar APENAS um objeto JSON válido, sem markdown, sem formatação, apenas o JSON.
+    Você DEVE retornar APENAS um ARRAY JSON válido contendo os objetos, sem markdown, sem formatação.
     Formato exigido:
-    {
-        "q": "O texto da pergunta",
-        "opts": ["Opção 1", "Opção 2", "Opção 3", "Opção 4"],
-        "ans": "O texto exato da opção que está correta",
-        "exp": "A explicação detalhada de por que essa opção está correta."
-    }
-`;
+    [
+      {
+          "q": "O texto da pergunta",
+          "opts": ["Opção 1", "Opção 2", "Opção 3", "Opção 4"],
+          "ans": "O texto exato da opção que está correta",
+          "exp": "A explicação detalhada de por que essa opção está correta."
+      }
+    ]
+  `;
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,20 +81,33 @@ async function fetchNextQuestion() {
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();
-    currentQuestionData = JSON.parse(rawJson);
+      
+    questionsCache = JSON.parse(rawJson);
 
-    renderQuestion();
+    totalQuestions = questionsCache.length;
+
+    loadNextQuestion(); 
   } catch (error) {
-    alert("Erro ao gerar questão. Detalhes: " + error.message);
-    currentQuestionNum--;
+    alert("Erro ao gerar as questões. Detalhes: " + error.message);
     switchScreen("setupScreen");
   }
 }
 
-function renderQuestion() {
+function loadNextQuestion() {
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("quizContent").style.display = "block";
+  
+  isAnswered = false;
+  
+  currentQuestionData = questionsCache[currentQuestionNum];
+  currentQuestionNum++;
+  
+  document.querySelector(".loading-state p").innerText = "A IA está formulando uma pergunta inédita...";
 
+  renderQuestion();
+}
+
+function renderQuestion() {
   document.getElementById("questionCounter").innerText =
     `Questão ${currentQuestionNum} de ${totalQuestions}`;
   document.getElementById("scoreCounter").innerText = `Acertos: ${score}`;
@@ -154,7 +171,7 @@ function checkAnswer() {
   document.getElementById("actionBtn").innerText =
     currentQuestionNum === totalQuestions
       ? "Finalizar Simulado"
-      : "Gerar Próxima Questão";
+      : "Próxima Questão";
 }
 
 function showResults() {
@@ -185,7 +202,7 @@ function handleAction() {
     checkAnswer();
   } else {
     if (currentQuestionNum < totalQuestions) {
-      fetchNextQuestion();
+      loadNextQuestion();
     } else {
       showResults();
     }
