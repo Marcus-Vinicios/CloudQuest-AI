@@ -8,5 +8,73 @@
     <script src="index.js" defer></script>
   </head>
   <body>
+        <div class="container">
+      <div class="header">
+        <h1>Simulador AWS Gerado por IA</h1>
+      </div>
+
+      <div class="content">
+        <div id="setupScreen" class="screen active setup-container">
+          <p style="margin-bottom: 20px; color: #666">
+            As questões serão geradas ao vivo por Inteligência Artificial. Cada
+            teste será único e inédito.
+          </p>
+
+          <div class="input-group">
+            <label>Chave da API do Gemini (Gratuita)</label>
+            <input
+              type="password"
+              id="apiKey"
+              placeholder="Cole sua API Key aqui..."
+              required
+            />
+            <small style="display: block; margin-top: 5px; color: #888"
+              >Obtenha em: aistudio.google.com</small
+            >
+          </div>
+
+          <div class="input-group">
+            <label>Número de Questões</label>
+            <select id="questionCount">
+              <option value="5">5 Questões</option>
+              <option value="10">10 Questões</option>
+              <option value="20">20 Questões</option>
+              <option value="30">30 Questões</option>
+              <option value="40">40 Questões</option>
+            </select>
+          </div>
+
+          <button id="startBtn">Gerar Primeira Questão</button>
+        </div>
+
+        <div id="quizScreen" class="screen">
+          <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>A IA está formulando uma pergunta inédita...</p>
+          </div>
+
+          <div id="quizContent" style="display: none">
+            <div class="question-header">
+              <span id="questionCounter">Questão 1 de 5</span>
+              <span id="scoreCounter">Acertos: 0</span>
+            </div>
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsContainer" class="options-container"></div>
+            <div id="explanationBox" class="explanation"></div>
+            <button id="actionBtn" disabled>Confirmar Resposta</button>
+          </div>
+        </div>
+
+        <div id="resultScreen" class="screen result-container">
+          <h2>Simulado Finalizado!</h2>
+          <div id="scoreCircle" class="score-circle">0%</div>
+          <div
+            id="resultMessage"
+            style="margin-bottom: 30px; color: #666; font-size: 18px"
+          ></div>
+          <button id="resetBtn">Fazer Novo Teste</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
