@@ -175,3 +175,19 @@ function showResults() {
 function resetQuiz() {
   switchScreen("setupScreen");
 }
+
+function enableButton() {
+  if (!isAnswered) document.getElementById("actionBtn").disabled = false;
+}
+
+function handleAction() {
+  if (!isAnswered) {
+    checkAnswer();
+  } else {
+    if (currentQuestionNum < totalQuestions) {
+      fetchNextQuestion();
+    } else {
+      showResults();
+    }
+  }
+}
