@@ -35,7 +35,8 @@ O sistema varia automaticamente entre os principais domínios exigidos pela prov
 
 1. **Clone o repositório:**
    ```bash
-   git clone [https://github.com/SMarcus-Vinicios/cloudquest-ai.git](https://github.com/Marcus-Vinicios/cloudquest-ai.git)
+   git clone https://github.com/Marcus-Vinicios/CloudQuest-AI.git
+   ```
 2. Certifique-se de que os três arquivos (`index.html`, `index.js` e `style.css`) estão na mesma pasta.
 3. Abra o `index.html` usando um servidor local (se usar o VS Code, recomendo a extensão **Live Server**).
 4. Insira a sua chave da API do Gemini (veja abaixo) e comece o teste!
